@@ -12,7 +12,7 @@
     }
   },
   "bin": {
-    "bhts": "./dist/bhts.js"
+    "bhts": "dist/bhts.js"
   },
   "files": [
     "dist",
