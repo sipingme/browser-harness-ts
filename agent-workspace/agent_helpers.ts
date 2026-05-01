@@ -8,7 +8,7 @@
  * primitives like `bh.gotoUrl`, `bh.clickAtXy`, `bh.js`, etc.
  *
  * Keep this file small and task-specific. For durable site knowledge, write a
- * markdown skill under `<browser-harness>/agent-workspace/domain-skills/<site>/`.
+ * markdown skill under `./domain-skills/<site>/` (see ./domain-skills/README.md).
  *
  * Example — delete/edit as you accumulate real helpers:
  */

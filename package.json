@@ -1,7 +1,7 @@
 {
   "name": "browser-harness-ts",
   "version": "0.1.0",
-  "description": "Python browser-harness 守护进程的薄 TypeScript 客户端,让 Python 和 TS agent 共享同一个 Chrome。",
+  "description": "Thin TypeScript client for the Python browser-harness daemon. Share one Chrome across Python and TS agents. / Python browser-harness 守护进程的薄 TypeScript 客户端,让 Python 和 TS agent 共享同一个 Chrome。",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -12,16 +12,25 @@
     }
   },
   "bin": {
-    "bhts": "./bin/bhts.ts"
+    "bhts": "./dist/bhts.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "README.zh-CN.md",
+    "LICENSE"
+  ],
   "scripts": {
     "setup": "bash scripts/setup.sh",
     "setup:attach": "browser-harness --setup",
+    "merge-skills": "bash scripts/merge-skills.sh",
     "doctor": "browser-harness --doctor",
-    "build": "tsc",
+    "build": "tsc && chmod +x dist/bhts.js",
     "typecheck": "tsc --noEmit",
     "example": "tsx examples/basic.ts",
-    "cli": "tsx bin/bhts.ts"
+    "cli": "tsx src/bhts.ts",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "engines": {
     "node": ">=20.6.0"
@@ -38,7 +47,18 @@
     "chrome",
     "automation",
     "agent",
-    "browser-harness"
+    "llm",
+    "browser-harness",
+    "chrome-devtools-protocol"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sipingme/browser-harness-ts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sipingme/browser-harness-ts/issues"
+  },
+  "homepage": "https://github.com/sipingme/browser-harness-ts#readme",
+  "author": "sipingme",
   "license": "MIT"
 }

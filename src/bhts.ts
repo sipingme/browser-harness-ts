@@ -1,4 +1,4 @@
-#!/usr/bin/env -S npx tsx
+#!/usr/bin/env node
 /**
  * bhts — a TS twin of `browser-harness -c '...'`.
  *
@@ -10,7 +10,7 @@
  *
  * Requires the Python daemon to be running (see `browser-harness --setup`).
  */
-import { BH } from "../src/index.js";
+import { BH } from "./index.js";
 
 const HELP = `bhts — TypeScript client for browser-harness
 

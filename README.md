@@ -123,7 +123,7 @@ browser-harness-ts/
 ├── browser-harness/         ← Python harness, bundled in-tree (has its own .git, .gitignored here)
 ├── src/                     ← this TS client
 ├── agent-workspace/         ← TS-side agent-editable helpers (hot-reload)
-├── bin/bhts.ts              ← `bhts -c '...'` CLI
+├── src/bhts.ts              ← `bhts -c '...'` CLI
 ├── examples/basic.ts        ← smoke demo
 ├── scripts/setup.sh         ← one-shot bootstrap (uv install + tsc build)
 └── package.json
@@ -201,7 +201,7 @@ TypeScript twin of `browser-harness -c '...'` — useful in shell scripts and
 for LLM agents that expect a subprocess-style interface:
 
 ```bash
-npx tsx bin/bhts.ts -c '
+npx tsx src/bhts.ts -c '
   await bh.newTab("https://example.com");
   await bh.waitForLoad();
   console.log(await bh.pageInfo());
@@ -229,9 +229,49 @@ export async function starRepo(bh: BH, owner: string, repo: string) {
 They auto-load on `BH.connect()` and are callable via `bh.helpers.starRepo(...)`.
 For long-running processes, call `bh.reloadAgentHelpers()` to pick up edits.
 
-Durable site knowledge (URL patterns, stable selectors, traps) still goes in
-the **bundled** Python repo at `./browser-harness/agent-workspace/domain-skills/<site>/`
-as markdown — language-neutral, readable by both Python and TS agents.
+## Adding your own sites (custom domain-skills)
+
+Durable site knowledge (URL patterns, stable selectors, traps) goes in
+markdown files under `agent-workspace/domain-skills/<site>/`. One folder per
+hostname stem — `www.xiaohongshu.com` → `xiaohongshu/`.
+
+```
+agent-workspace/domain-skills/
+├── your-company-crm/
+│   ├── login.md
+│   └── reports.md
+├── internal-dashboard/
+│   └── scraping.md
+└── README.md                ← full convention + examples
+```
+
+Your custom skills live in **this repo** (`browser-harness-ts/agent-workspace/`),
+so they track with your commits and don't conflict with upstream. The 76
+upstream skills stay in `./browser-harness/agent-workspace/domain-skills/`
+and update via `git pull` inside that directory.
+
+Two ways to make the agent see both libraries:
+
+- **Default**: just tell the LLM (or your agent's system prompt) to read from both
+  paths. Python's `goto_url()` will only auto-detect the upstream one, but
+  markdown files can be read by any agent from anywhere.
+- **Advanced** — run `npm run merge-skills` once. It symlinks every upstream
+  skill folder into `agent-workspace/domain-skills/`, then point Python at
+  your workspace:
+
+  ```bash
+  npm run merge-skills
+  export BH_AGENT_WORKSPACE="$(pwd)/agent-workspace"
+  browser-harness --reload
+  ```
+
+  Now `goto_url()` auto-detects upstream *and* your custom skills, and Python's
+  `_load_agent_helpers()` picks up your TS workspace's `agent_helpers.py` if
+  you add one. Re-run `merge-skills` after upstream adds new skills.
+
+See [`agent-workspace/domain-skills/README.md`](./agent-workspace/domain-skills/README.md)
+for the full rubric on what belongs in a skill file (and what doesn't — no
+pixel coordinates, no secrets, no task diaries).
 
 ## API Summary
 

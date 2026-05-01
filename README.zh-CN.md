@@ -115,7 +115,7 @@ browser-harness-ts/
 ├── browser-harness/         ← Python 守护进程(随本仓库一起存在,带独立的 .git,本仓库 .gitignore 忽略)
 ├── src/                     ← 本 TS 客户端
 ├── agent-workspace/         ← TS 侧可热加载的 agent helpers
-├── bin/bhts.ts              ← `bhts -c '...'` 命令行
+├── src/bhts.ts              ← `bhts -c '...'` 命令行
 ├── examples/basic.ts        ← smoke 示例
 ├── scripts/setup.sh         ← 一键安装脚本(uv 安装 + tsc 编译)
 └── package.json
@@ -193,7 +193,7 @@ npx tsx examples/basic.ts
 喜欢用子进程接口的 LLM agent:
 
 ```bash
-npx tsx bin/bhts.ts -c '
+npx tsx src/bhts.ts -c '
   await bh.newTab("https://example.com");
   await bh.waitForLoad();
   console.log(await bh.pageInfo());
@@ -221,9 +221,46 @@ export async function starRepo(bh: BH, owner: string, repo: string) {
 `BH.connect()` 时自动加载,通过 `bh.helpers.starRepo(...)` 调用。
 长驻进程里 agent 改了文件后,调 `bh.reloadAgentHelpers()` 立刻生效。
 
-**持久的站点知识**(URL 规律、稳定选择器、坑点)仍然写到 Python repo 里
-`./browser-harness/agent-workspace/domain-skills/<站点>/` 下,以 markdown 形式——
-**语言中立,Python 和 TS agent 都能读**。
+## 添加你自己的站点(自定义 domain-skills)
+
+**持久的站点知识**(URL 规律、稳定选择器、坑点)放在
+`agent-workspace/domain-skills/<站点>/*.md` 里,一个文件夹一个站点 ——
+`www.xiaohongshu.com` → `xiaohongshu/`。
+
+```
+agent-workspace/domain-skills/
+├── your-company-crm/
+│   ├── login.md
+│   └── reports.md
+├── internal-dashboard/
+│   └── scraping.md
+└── README.md                ← 完整规范 + 示例
+```
+
+**你的自定义 skill 住在本仓库里**(`browser-harness-ts/agent-workspace/`),
+跟着你的 commit 一起版本化,和上游 76 个 skill 互不冲突。上游那 76 个继续留在
+`./browser-harness/agent-workspace/domain-skills/`,靠 `git pull` 更新。
+
+让 agent 同时看到两个 skill 库有两种方式:
+
+- **默认方式**:在你的 LLM system prompt 里告诉它两个路径都读就行 ——
+  markdown 文件任何 agent 从任何地方都能读,只是 Python 的 `goto_url()`
+  默认只自动检测上游那个路径。
+- **进阶方式**——跑一次 `npm run merge-skills`,它会把上游每个 skill 文件夹
+  都符号链接到 `agent-workspace/domain-skills/` 下,然后把 Python 指过来:
+
+  ```bash
+  npm run merge-skills
+  export BH_AGENT_WORKSPACE="$(pwd)/agent-workspace"
+  browser-harness --reload
+  ```
+
+  这样 `goto_url()` 会自动检测**上游 + 你的自定义**双份 skill。同时 Python 的
+  `_load_agent_helpers()` 也会读你工作区里的 `agent_helpers.py`(如果你写了)。
+  上游新增 skill 之后重跑一次 `merge-skills` 即可。
+
+完整规范(什么能写、什么不能写 —— 不要原始像素坐标、不要秘密、不要流水账任务日志)
+见 [`agent-workspace/domain-skills/README.md`](./agent-workspace/domain-skills/README.md)。
 
 ## API 速查
 
