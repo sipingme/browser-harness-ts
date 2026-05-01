@@ -2,6 +2,15 @@
 
 [English](./README.md) · **简体中文**
 
+> **致谢** —— 所有难活(CDP 握手、对话框处理、陈旧 session 自愈、浏览器配置目录发现、
+> 远程云浏览器,以及 `./browser-harness/agent-workspace/domain-skills/` 下的 76 个
+> domain-skills)都是
+> [**Browser Use**](https://github.com/browser-use) 团队在上游
+> [`browser-use/browser-harness`](https://github.com/browser-use/browser-harness)
+> 项目里的工作。本包只是一个薄 TypeScript 客户端,通过与语言无关的 JSON-line IPC
+> 和他们的守护进程说话——**所有浏览器控制逻辑都没有在这里重新实现**。
+> 非常感谢 Browser Use 团队把协议设计得这么好包装。
+
 一个**内置** Python [`browser-harness`](./browser-harness) 守护进程的**薄 TypeScript 客户端**。
 一个 Chrome、一个 daemon、一套 JSON 协议——Python agent 和 TS agent 可以同时连上来用。
 
@@ -338,6 +347,24 @@ npx tsx -e '
 
 浏览器状态、登录态、Cookie 在两次调用之间**完全保留**——它们操作的是同一个 Chrome tab。
 
+## 致谢
+
+这个包只是在 **Browser Use** 团队出色工作之上的一层薄包装。
+
+- 上游项目:[`browser-use/browser-harness`](https://github.com/browser-use/browser-harness) —— MIT 许可,Copyright © 2026 Browser Use
+- 上游公司:[Browser Use](https://browser-use.com)(也是大名鼎鼎的
+  [`browser-use`](https://github.com/browser-use/browser-use) agent 框架的作者)
+
+所有的浏览器控制逻辑、CDP 守护进程、对话框处理,以及整个
+`domain-skills/`(76 个站点)都住在上游 Python 仓库里,在这里作为一个
+submodule 式的子目录内置进来。这个 TS 包只贡献了 JSON-line IPC 客户端和
+一层带类型的薄 API。
+
+如果你觉得 `browser-harness-ts` 有用,也请去
+[上游仓库](https://github.com/browser-use/browser-harness) star 一下——
+真正的功夫都在那边。
+
 ## 许可
 
-MIT —— 与 Python 原版一致。
+MIT —— 与 Python 原版许可相同、条款相同,但版权各自独立
+(本包的版权说明见 [`LICENSE`](./LICENSE))。

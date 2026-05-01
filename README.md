@@ -2,6 +2,16 @@
 
 **English** · [简体中文](./README.zh-CN.md)
 
+> **Credits** — All the hard parts (CDP handshake, dialog handling, stale-session
+> recovery, profile discovery, remote cloud browsers, and the 76 domain-skills
+> in `./browser-harness/agent-workspace/domain-skills/`) are the work of
+> [**Browser Use**](https://github.com/browser-use) in the upstream
+> [`browser-use/browser-harness`](https://github.com/browser-use/browser-harness)
+> project. This package is a thin TypeScript client that talks to their daemon
+> over a language-agnostic JSON-line IPC — **none** of the browser control
+> logic is re-implemented here. Huge thanks to the Browser Use team for
+> designing a protocol that's this easy to wrap.
+
 A thin TypeScript client that bundles and talks to the Python
 [`browser-harness`](./browser-harness) daemon. One Chrome, one daemon, one
 JSON protocol — usable from both Python and TS agents at the same time.
@@ -327,6 +337,26 @@ import { spawn } from "node:child_process";
 spawn("browser-harness", ["--doctor"], { stdio: "inherit" });
 ```
 
+## Credits
+
+This package is a thin wrapper around the brilliant work done by the
+**Browser Use** team.
+
+- Upstream project: [`browser-use/browser-harness`](https://github.com/browser-use/browser-harness) — MIT License, Copyright © 2026 Browser Use
+- Upstream company: [Browser Use](https://browser-use.com) (also the authors
+  of the popular [`browser-use`](https://github.com/browser-use/browser-use)
+  agent framework)
+
+All browser control logic, the CDP daemon, dialog handling, and the entire
+`domain-skills/` library (76 sites) live in the upstream Python repo and are
+bundled here as a submodule-like directory. This TS package only contributes
+the JSON-line IPC client and a thin typed surface on top.
+
+If you find `browser-harness-ts` useful, please consider starring the
+[upstream repo](https://github.com/browser-use/browser-harness) too — that's
+where the real work happens.
+
 ## License
 
-MIT — same as the Python original.
+MIT — same license as the Python original, same terms, but separate copyright
+(see [`LICENSE`](./LICENSE) for this package's notice).

@@ -37,7 +37,7 @@ async function main(): Promise<number> {
   }
   if (argv[0] === "--version") {
     // Keep cheap — no I/O for something this small.
-    process.stdout.write("browser-harness-ts 0.1.0\n");
+    process.stdout.write("browser-harness-ts 0.1.1\n");
     return 0;
   }
   if (argv[0] !== "-c" || argv.length < 2) {

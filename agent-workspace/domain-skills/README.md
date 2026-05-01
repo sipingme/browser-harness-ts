@@ -2,6 +2,12 @@
 
 > English | [中文](./README.zh-CN.md)
 
+> The 76 upstream skills live in `../../browser-harness/agent-workspace/domain-skills/`
+> and are the work of the **Browser Use** team in
+> [`browser-use/browser-harness`](https://github.com/browser-use/browser-harness).
+> The convention used below (one folder per hostname stem, markdown as the
+> storage format, "map not diary" rule) is all theirs — credit to them.
+
 Put your own site-specific knowledge here, one folder per site.
 
 ```

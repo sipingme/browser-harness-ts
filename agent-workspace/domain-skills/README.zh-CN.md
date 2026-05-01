@@ -2,6 +2,12 @@
 
 > [English](./README.md) | 中文
 
+> 上游那 76 个 skill 住在 `../../browser-harness/agent-workspace/domain-skills/`,
+> 全部是 **Browser Use** 团队在
+> [`browser-use/browser-harness`](https://github.com/browser-use/browser-harness)
+> 里的工作。下文用到的约定(一个 hostname 一个文件夹、markdown 存储、
+> "地图而非日记"原则)也都来自他们,特此致谢。
+
 把你自己的站点知识放这里,一个站点一个文件夹。
 
 ```

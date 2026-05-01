@@ -1,6 +1,6 @@
 {
   "name": "browser-harness-ts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Thin TypeScript client for the Python browser-harness daemon. Share one Chrome across Python and TS agents. / Python browser-harness 守护进程的薄 TypeScript 客户端,让 Python 和 TS agent 共享同一个 Chrome。",
   "type": "module",
   "main": "./dist/index.js",
