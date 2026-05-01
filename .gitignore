@@ -1,0 +1,12 @@
+node_modules/
+dist/
+*.log
+.env
+.DS_Store
+/tmp/
+
+# Bundled Python browser-harness — has its own .git and is cloned by
+# `npm run setup` on first use. Keeping it out of this repo's tracking
+# avoids the nested-git-repo warning and upstream-vs-fork confusion.
+# To vendor a pinned copy instead, remove this line and `git add` it.
+/browser-harness/
